@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>vocus 前端工程師面試流程翻修（AI 開發時代版） — 2026-06-03</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Source+Serif+4:ital,wght@0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #ffffff;
+  --fg: #000000;
+  --muted: #f5f5f5;
+  --muted-fg: #525252;
+  --border: #000000;
+  --border-light: #e5e5e5;
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-body: 'Source Serif 4', Georgia, serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: var(--font-body);
+  background: var(--bg); color: var(--fg);
+  line-height: 1.625; max-width: 960px; margin: 0 auto;
+  padding: 40px 24px; font-size: 16px;
+}
+
+/* Typography */
+h1 { font-family: var(--font-display); font-size: 3rem; font-weight: 900; letter-spacing: -0.03em; line-height: 1.1; margin-bottom: 12px; }
+h2 { font-family: var(--font-display); font-size: 1.25rem; font-weight: 700; letter-spacing: -0.02em; margin: 8px 0; }
+h3 { font-family: var(--font-display); font-size: 1.1rem; font-weight: 700; margin: 16px 0 8px; }
+h4 { font-family: var(--font-display); font-size: 0.98rem; font-weight: 700; margin: 14px 0 6px; }
+p { margin: 8px 0; }
+ul, ol { margin: 8px 0 8px 22px; }
+li { margin: 4px 0; }
+
+/* Overall status */
+.overall-status { padding: 32px 0 24px; margin-bottom: 16px; border-bottom: 4px solid var(--fg); }
+.subtitle { font-size: 1.05rem; color: var(--muted-fg); margin: 4px 0 16px; }
+
+/* Status badges */
+.status { display: inline-flex; align-items: center; padding: 2px 8px; font-family: var(--font-mono); font-size: 0.7rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.1em; white-space: nowrap; border: 1px solid var(--border-light); }
+.status-green { color: var(--muted-fg); border-color: var(--border-light); }
+.status-yellow { color: var(--fg); border: 2px solid var(--fg); font-weight: 500; }
+.status-red { background: var(--fg); color: var(--bg); border-color: var(--fg); font-weight: 500; }
+
+/* Collapsible sections */
+details { margin: 0; border: none; border-top: 1px solid var(--border-light); }
+details:last-of-type { border-bottom: 1px solid var(--border-light); }
+summary { padding: 14px 0; cursor: pointer; font-family: var(--font-display); font-weight: 700; font-size: 1rem; background: transparent; user-select: none; list-style: none; letter-spacing: -0.01em; }
+summary::-webkit-details-marker { display: none; }
+summary::after { content: '+'; float: right; font-family: var(--font-mono); font-weight: 400; font-size: 1.2rem; line-height: 1.4; }
+details[open] > summary::after { content: '\2212'; }
+summary::before { display: none; }
+summary h2, summary h3 { display: inline; font-size: inherit; font-weight: inherit; font-family: inherit; letter-spacing: inherit; margin: 0; }
+.section-content { padding: 8px 0 24px; }
+
+/* Override inline table attributes from LLM */
+table[border] { border: none; }
+table[border] td, table[border] th { border-left: none; border-right: none; }
+
+/* Metric cards */
+.metric-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 0; margin: 16px 0; }
+.metric-card { padding: 20px; background: var(--bg); border: 1px solid var(--fg); margin: -0.5px; }
+.metric-label { font-family: var(--font-mono); font-size: 0.65rem; color: var(--muted-fg); text-transform: uppercase; letter-spacing: 0.1em; font-weight: 500; }
+.metric-value { font-family: var(--font-display); font-size: 2rem; font-weight: 900; margin: 4px 0; font-variant-numeric: tabular-nums; letter-spacing: -0.03em; line-height: 1.1; }
+.metric-sub { font-size: 0.75rem; color: var(--muted-fg); }
+
+/* Tables */
+table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 0.85rem; }
+thead th { background: transparent; text-align: left; padding: 8px 12px; font-family: var(--font-mono); font-size: 0.7rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted-fg); border-bottom: 2px solid var(--fg); white-space: nowrap; }
+td { padding: 8px 12px; border-bottom: 1px solid var(--border-light); vertical-align: top; }
+tbody tr:hover td { background: var(--muted); }
+td.num, th.num { text-align: right; font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+
+/* Action list — subtle color accents for severity */
+.action-list { list-style: none; margin: 12px 0; }
+.action-item { padding: 16px 20px; margin: 0; border-left: none; border-bottom: 1px solid var(--border-light); }
+.action-item:first-child { border-top: 1px solid var(--border-light); }
+.action-red { background: #fef2f2; border-left: 4px solid #dc2626; padding-left: 16px; }
+.action-red .action-title { color: #dc2626; }
+.action-red .action-detail { color: var(--muted-fg); }
+.action-yellow { background: #fffbeb; border-left: 4px solid #d97706; padding-left: 16px; }
+.action-yellow .action-title { color: #92400e; }
+.action-green { background: #f0fdf4; border-left: 4px solid #16a34a; padding-left: 16px; }
+.action-green .action-title { color: #166534; }
+.action-title { font-family: var(--font-display); font-weight: 700; font-size: 0.95rem; }
+.action-detail { font-size: 0.82rem; margin-top: 4px; color: var(--muted-fg); line-height: 1.5; }
+
+/* Toolbar */
+.toolbar { display: flex; gap: 0; margin: 16px 0; }
+.toolbar button { padding: 6px 14px; border: 1px solid var(--fg); margin: -0.5px; background: var(--bg); color: var(--fg); cursor: pointer; font-family: var(--font-mono); font-size: 0.7rem; font-weight: 400; text-transform: uppercase; letter-spacing: 0.08em; transition: all 0.1s; }
+.toolbar button:hover { background: var(--fg); color: var(--bg); }
+.toolbar button.active { background: var(--fg); color: var(--bg); font-weight: 500; }
+
+/* Misc */
+blockquote { border-left: 4px solid var(--fg); padding: 12px 20px; margin: 12px 0; font-style: italic; font-family: var(--font-display); color: var(--muted-fg); font-size: 0.95rem; }
+pre { background: var(--muted); padding: 16px; overflow-x: auto; font-size: 0.8rem; margin: 12px 0; border: 1px solid var(--border-light); }
+code { font-family: var(--font-mono); font-size: 0.82em; }
+p code, li code, td code { background: var(--muted); padding: 2px 5px; }
+.text-muted { font-family: var(--font-mono); color: var(--muted-fg); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; }
+
+/* Tier dividers */
+.tier-divider {
+  padding: 8px 0;
+  margin: 24px 0 8px;
+  border-top: 2px solid var(--fg);
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--muted-fg);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+/* Context note — cross-team explanatory callout */
+.context-note {
+  margin: 12px 0 4px;
+  padding: 12px 16px;
+  background: var(--muted);
+  border-left: 3px solid var(--muted-fg);
+  font-size: 0.9rem;
+  color: var(--fg);
+  line-height: 1.7;
+}
+.context-note p { margin: 6px 0; }
+.context-note p:first-child { margin-top: 0; }
+.context-note p:last-child { margin-bottom: 0; }
+.context-note strong { font-weight: 700; }
+.inline-note {
+  display: block;
+  margin-top: 6px;
+  padding-left: 8px;
+  border-left: 2px solid var(--border-light);
+  font-size: 0.78rem;
+  color: var(--muted-fg);
+  line-height: 1.55;
+}
+
+/* JD copy block */
+.jd-block { border: 2px solid var(--fg); padding: 24px; margin: 16px 0; }
+.jd-block h3:first-child { margin-top: 0; }
+
+/* Print */
+@media print {
+  body { max-width: 100%; padding: 0; }
+  .toolbar, .global-toolbar, .report-nav { display: none !important; }
+  details { border: none; }
+  details > summary { display: none; }
+  .section-content { padding: 0; }
+  .action-item { break-inside: avoid; }
+}
+
+/* Mobile */
+@media (max-width: 640px) {
+  h1 { font-size: 2rem; }
+  .metric-grid { grid-template-columns: 1fr 1fr; }
+  .metric-value { font-size: 1.5rem; }
+  .tier-divider { font-size: 0.75rem; letter-spacing: 0.08em; }
+}
+</style>
+</head>
+<body>
+
+<div class="overall-status">
+  <h1>前端工程師面試流程翻修</h1>
+  <p class="subtitle">AI 開發時代版 — 從「考能不能寫程式」改成「考能不能判斷、review、駕馭 AI 把對的東西做對」</p>
+  <p>
+    <span class="status status-red">內部審閱草案</span>
+    <span class="status status-yellow">待團隊對齊</span>
+    <span class="status status-green">2026-06-03</span>
+  </p>
+  <p style="margin-top:12px;color:var(--muted-fg);font-size:0.92rem;">
+    背景：Eva 離職，前端職缺重開。現行面試流程為 2022–2023 設計，需配合 AI 開發為主的時代整套翻修。
+    本文件含三份產出：① 給 CEO／跨團隊的白話說明、② 對外可發布的 Job Description、③ 新版面試流程設計（含評分 rubric、題庫、ccusage 信號分析），附網路研究依據與來源。
+  </p>
+</div>
+
+<div class="metric-grid">
+  <div class="metric-card">
+    <div class="metric-label">新版流程</div>
+    <div class="metric-value">5</div>
+    <div class="metric-sub">階段漏斗（履歷 → offer）</div>
+  </div>
+  <div class="metric-card">
+    <div class="metric-label">評分維度</div>
+    <div class="metric-value">5</div>
+    <div class="metric-sub">結構化 rubric，可稽核</div>
+  </div>
+  <div class="metric-card">
+    <div class="metric-label">傳統測驗滿分率</div>
+    <div class="metric-value">40–50%</div>
+    <div class="metric-sub">AI 讓 LeetCode 失去鑑別力</div>
+  </div>
+  <div class="metric-card">
+    <div class="metric-label">技術職作弊率</div>
+    <div class="metric-value">48%</div>
+    <div class="metric-sub">Fabric 19,368 場面試分析</div>
+  </div>
+  <div class="metric-card">
+    <div class="metric-label">Work Sample 效度</div>
+    <div class="metric-value">r=.54</div>
+    <div class="metric-sub">最強單一預測指標</div>
+  </div>
+  <div class="metric-card">
+    <div class="metric-label">被拒滿意度</div>
+    <div class="metric-value">+35%</div>
+    <div class="metric-sub">結構化面試 vs 非結構化</div>
+  </div>
+</div>
+
+<!-- ============ SECTION 1 ============ -->
+<details open>
+<summary><h2>1. 給 CEO／跨團隊：我們在改什麼、為什麼</h2></summary>
+<div class="section-content">
+
+<div class="context-note">
+  <p>這一節是給非前端、非技術背景的同仁讀的。一句話總結：<strong>我們現在用的面試題，AI 已經可以幫候選人秒答，所以分不出誰強誰弱了。新流程改成評估「人的判斷力」——這是 AI 取代不了、也正是這個職務的價值所在。</strong></p>
+</div>
+
+<h3>現況的問題</h3>
+<ul>
+  <li><strong>流程老舊</strong>：現行兩份面試文件（Notion 上的「Frontend Interview」與「vocus F2E challenge」）是 2022–2023 設計的。實作題仍是「用 Next.js 做一個作者文章頁、SSR 帶出前四篇」，預期工時一天、用 AI 半天——這在今天已無法區分候選人能力高低。</li>
+  <li><strong>AI 讓傳統題目失去鑑別力</strong>：研究顯示 40–50% 候選人在當前技術測驗能拿滿分；ChatGPT 數秒解掉多數 LeetCode 題；技術職位有 48% 候選人在面試中使用 AI 作弊。題目愈「標準」，愈分不出真實能力。</li>
+  <li><strong>禁用 AI 不是答案</strong>：到 2025 年底，70% 雇主已主動在面試測試 AI 流暢度。一味禁止只會讓作弊轉入地下、更難辨識。主流做法是「公開允許 AI、改評估使用 AI 的方式」。</li>
+</ul>
+
+<h3>我們改成什麼</h3>
+<div class="context-note">
+  <p><strong>核心轉向</strong>：不再問「你能不能把程式碼寫出來」（AI 都能寫），改問「你能不能判斷這段程式碼對不對、該不該這樣設計、AI 給錯時你看不看得出來」。</p>
+  <p>引用 Google Chrome 工程領導 Addy Osmani 的觀點：<em>AI 會放大既有的工程品質——基礎強的人獲得複合優勢，基礎弱的人則是「混亂被加速」。</em>我們要找的是判斷力強的人，不是打字快、或 token 燒得多的人。</p>
+</div>
+<ul>
+  <li><strong>履歷階段</strong>就收結構化問答 + 一份 AI 開發成果，沒填的履歷參考價值低（直接提升初篩品質）。</li>
+  <li><strong>實作題允許並鼓勵用 AI</strong>，但要求附上使用的 prompt；交件後一定接一場 live 對談，請候選人親口解釋每個決策——這能分離「AI 寫的」與「候選人真的懂的」。</li>
+  <li>新增<strong>「Code Review 反向題」</strong>：給一段 AI 產生、藏有缺陷的程式碼，請候選人挑錯。這比「叫他寫程式」更難作弊，也最貼近 vocus 日常工作。</li>
+  <li>系統設計題改用 <strong>vocus 真實情境</strong>（文章頁快取策略、Web Vitals 劣化診斷），考架構判斷力。</li>
+</ul>
+
+<h3>順帶解決 / 可宣傳的點</h3>
+<ul>
+  <li><strong>招募賣點即專業宣傳</strong>：JD 明寫「兩週一次與外部 SEO 顧問會議」「AI 工具費用可核銷」「內部自建 Skill／Agent 系統」——這些同時是吸引人才與對外展示專業度的素材。</li>
+  <li><strong>角色定位（重要）</strong>：此職缺將<strong>承接</strong> Kuan／Jiang／Eva 先前那種需要大量開會、跨職能協調的角色——由這位新夥伴擔任前端與 PM／設計／後端／外部顧問之間的溝通橋樑。因此面試流程必須確認候選人<strong>具備類似的協調／會議經驗，或至少清楚預期到這個職務會有相當比例的會議與協調</strong>，避免到職後落差。</li>
+  <li><strong>公平與可稽核</strong>：採結構化 rubric 評分。研究顯示結構化面試讓被拒候選人滿意度提升 35%、預測效度高於非結構化面試 34%，也降低偏誤與法律風險。</li>
+</ul>
+
+<div class="context-note">
+  <p><strong>需要 CEO／David 拍板的兩件事</strong>（細節見第 7 節）：</p>
+  <p>1. 本設計假設此職缺<strong>承接</strong> Kuan／Jiang／Eva 的會議協調職責（讓既有同仁從中釋出）。但 David 先前提過要重新評估「是否還需要這個會議協調型角色」——若 David 決定縮減或取消此會議職責，JD 的「工作方式」與面試的角色對齊話術都需調整。</p>
+  <p>2. 是否要求候選人附 ccusage（AI token 用量）紀錄。建議「收、但只當脈絡，不以數字多寡評分」——原因見第 6 節（有 gaming、公平性與效度風險）。</p>
+</div>
+
+</div>
+</details>
+
+<!-- ============ SECTION 2 ============ -->
+<details open>
+<summary><h2>2. 對外 Job Description（可直接發布）</h2></summary>
+<div class="section-content">
+
+<div class="context-note">
+  <p>以下為可直接貼到 104／CakeResume／LinkedIn 的版本。藍字脈絡說明僅供內部，發布時請刪除本框與所有「內部註」。聯絡窗口請更新（原 F2E challenge 窗口為即將離職的 Eva）。</p>
+</div>
+
+<div class="jd-block">
+<h3>前端工程師 Frontend Engineer（AI-Native / SEO-Aware）</h3>
+
+<h4>關於 vocus 方格子</h4>
+<p>vocus 方格子是台灣最大的內容創作與知識變現平台，並持續拓展東南亞等國際市場。我們以「創作至上」為核心價值，打造讓創作者自由發表、累積影響力並獲得實質收益的生態圈。平台需求涵蓋 2B、2C 與營運，從金流、前後台、核心編輯器與閱讀頁，到 SEO/AIO/GEO 技術實作。</p>
+
+<h4>這個角色</h4>
+<p>你將是一位具備 SEO/AIO/GEO 意識的前端工程師，從專案立案到上線全程參與。你也會是<strong>前端與 PM／設計／後端及外部顧問之間的溝通橋樑</strong>，參與較多的跨職能會議與需求協調。我們重視的不是你用什麼工具，而是你<strong>對使用者體驗的判斷、對 SEO 與效能的把關、對棘手問題的排查，以及把功能「做對做好」與「對齊各方」的能力</strong>——這些是 AI 無法取代的。我們的文化是積極擁抱新工具，用 AI 把實作時間壓縮出來，把心力留給更有價值的判斷與協作。</p>
+
+<h4>主要職責</h4>
+<ul>
+  <li>開發 vocus 前端功能，提供流暢且豐富的服務體驗</li>
+  <li>維護全站 SEO 品質：與外部顧問定期檢視指標，負責頁面效能、Accessibility、Web Vitals 調校與監控；在開發前期就給予 SEO/GEO 建議與把關</li>
+  <li>與工程團隊優化系統架構與開發流程：與後端協作進行 API 架構優化，以及監控、報錯、Issue Tracking</li>
+  <li>以前端專業與 PM、設計師討論新功能方向並評估可行性</li>
+  <li>撰寫易維護、高可讀性的程式碼，參與 Code Review</li>
+  <li>善用並持續優化 AI-augmented 前端開發流程（Claude Code、Codex、Copilot、Cursor，以及團隊自建的 Skill／Agent 系統）</li>
+</ul>
+
+<h4>具備條件（必備）</h4>
+<ul>
+  <li><strong>精熟 React / Next.js 運作原理</strong>：理解 rendering model（SSR/SSG/ISR/CSR 的取捨）、元件生命週期與資料流，而非僅記憶 API</li>
+  <li><strong>紮實的 JavaScript / TypeScript 基礎</strong>：能判斷程式碼（含 AI 產出）的正確性、效能與安全性</li>
+  <li>熟悉狀態管理（SWR / Redux / React Context）與樣式方案（Tailwind CSS / Radix UI / styled-components）</li>
+  <li><strong>SEO / Web Vitals（LCP / INP / CLS）/ Accessibility 的實作與調校經驗</strong>，並具備 GEO（生成式引擎優化）意識</li>
+  <li>熟悉前端測試框架（Jest / Cypress），能針對情境撰寫測試</li>
+  <li>熟悉 Git 與 Git Flow；能透過 Swagger 文件串接後端 API</li>
+  <li><strong>以 AI 協作為日常工作流</strong>：能設計 prompt／context、能 review 並驗證 AI 產出、知道何時不該用 AI，並有一套自己的 AI 開發 workflow</li>
+  <li>具備閱讀程式原始碼與技術文件的能力與習慣</li>
+</ul>
+<p class="text-muted" style="text-transform:none;letter-spacing:0;font-size:0.8rem;color:var(--muted-fg);">內部註：相較舊版，新增「GEO／INP／rendering model 理解」「AI 協作為日常工作流」，並把「背語法／closure 定義」類淘汰——這類 AI 秒答、實務少用。</p>
+
+<h4>擁有這些會很加分</h4>
+<ul>
+  <li>前端系統設計、組織大型專案結構的經驗</li>
+  <li>帶領小型團隊、Mentor 工程師，或主導技術決策與流程優化的經驗</li>
+  <li><strong>用 AI 大幅提升效率的具體案例</strong>（元件生成、自動化測試／重構、PoC 加速、文件自動產出）</li>
+  <li><strong>用 AI 跨領域</strong>的經驗（非慣用語言開發，或行銷／設計／法務等）</li>
+  <li>熟悉 CI/CD 建置流；具 SEO 調校深度經驗</li>
+  <li>過往工作或作品與內容產業相關</li>
+</ul>
+
+<h4>我們的工作方式</h4>
+<ul>
+  <li><strong>前端的跨職能溝通橋樑角色</strong>：你會代表前端參與較多的跨職能會議與需求協調（與 PM／設計／後端／外部顧問），以及兩週一次的外部 SEO 顧問會議。我們在找能 own 這份協調責任、並善用 AI 把實作時間壓縮出來的人</li>
+  <li><strong>兩週一次與外部 SEO 顧問會議</strong>：與業界專家定期切磋，持續精進平台 SEO/GEO 專業</li>
+  <li><strong>AI 工具費用可核銷</strong>：我們鼓勵主動嘗試、評估並把對的工具帶進團隊</li>
+  <li>內部自建 Skill／Agent 系統與成熟的 AI coding workflow</li>
+</ul>
+
+<h4>應徵方式（請隨履歷附上，缺少者恕難評估）</h4>
+<p>除履歷外，請一併提供：</p>
+<ol>
+  <li>四個簡答（每題一段即可）：
+    <ul>
+      <li>(1) 你目前日常的 AI 協作流程是如何？</li>
+      <li>(2) 你是否曾用 AI 嘗試不同領域（非慣用語言的開發，或行銷／設計／法務等）？</li>
+      <li>(3) 你是否能獨自設計一套開發 Workflow？請舉例。</li>
+      <li>(4) 你平時如何 review AI 的產出？以及如何 review 同事的程式碼（無論對方是否使用 AI）？</li>
+    </ul>
+  </li>
+  <li>一個你引以為傲的功能或成就：附 GitHub repo／Demo／2 分鐘短片皆可。若有 AI 參與，請說明哪些是 AI、哪些是你的判斷與驗證。</li>
+  <li>（選填，鼓勵提供）你「最投入的一個月」AI 開發工具用量紀錄（例如 <code>ccusage</code> 月報截圖），並用一句話說明：當時在做什麼、成果是什麼。<strong>我們不以數字多寡評分，只想了解你與 AI 協作的脈絡。</strong></li>
+</ol>
+</div>
+
+</div>
+</details>
+
+<!-- ============ SECTION 3 ============ -->
+<details open>
+<summary><h2>3. 新版面試流程設計（漏斗 + 各關卡理由）</h2></summary>
+<div class="section-content">
+
+<div class="context-note">
+  <p>設計原則（皆有研究支撐，來源見第 8 節）：<strong>① 公開允許 AI、改評估使用方式；② 用最貼近真實工作的題型（work sample + code review）取代抽象謎題；③ 每關都有「無 AI 反思」環節分離真實理解；④ 全程結構化 rubric 評分；⑤ 把 live 環節集中為單一 block，降低候選人時程負擔、加快 time-to-offer。</strong></p>
+</div>
+
+<h3>整體漏斗</h3>
+<table>
+<thead>
+<tr><th>階段</th><th>形式 / 時間</th><th>AI 政策</th><th>主要評估</th><th>淘汰閾值</th></tr>
+</thead>
+<tbody>
+<tr>
+  <td><strong>S0 履歷 + 結構化問答 + AI 作品</strong></td>
+  <td>非同步</td>
+  <td>—</td>
+  <td>動機、AI 協作脈絡、作品品質</td>
+  <td>未填問答／無作品 → 低優先</td>
+</tr>
+<tr>
+  <td><strong>S1 角色對齊面談</strong></td>
+  <td>視訊 30 分</td>
+  <td>—</td>
+  <td>動機、溝通、IC 角色契合度</td>
+  <td>角色期待不合 → 止步</td>
+</tr>
+<tr>
+  <td><strong>S2 AI-allowed 實作題</strong></td>
+  <td>非同步 60–90 分</td>
+  <td>鼓勵用、需附 prompt</td>
+  <td>工作流、決策、產出品質</td>
+  <td>無法運作／無決策痕跡</td>
+</tr>
+<tr>
+  <td><strong>S3 Live 技術面（單場集中）</strong></td>
+  <td>90 分</td>
+  <td>分段允許／禁用</td>
+  <td>判斷力、code review、系統設計、底層知識</td>
+  <td>rubric 任一維度過低</td>
+</tr>
+<tr>
+  <td><strong>S4 跨職能協作 + 文化面</strong></td>
+  <td>45 分</td>
+  <td>—</td>
+  <td>協作、SEO/GEO 意識、AI workflow 觀</td>
+  <td>協作或文化不合</td>
+</tr>
+<tr>
+  <td><strong>S5 Offer / 收斂</strong></td>
+  <td>—</td>
+  <td>—</td>
+  <td>rubric 彙整 + 校準會議</td>
+  <td>—</td>
+</tr>
+</tbody>
+</table>
+
+<div class="context-note">
+  <p>整條流程 live 接觸控制在 <strong>3 場（S1 / S3 / S4）</strong>，且 S3 把實作追問、code review、系統設計集中在單一 90 分鐘 block——降低候選人的時程負擔、加快 time-to-offer。</p>
+</div>
+
+<div class="tier-divider">逐關設計</div>
+
+<h3>S0 — 履歷 + 結構化問答 + AI 作品（初篩）</h3>
+<ul>
+  <li><strong>收什麼</strong>：履歷 + 四個簡答（見第 5 節）+ 一份引以為傲的 AI 開發成果（repo／demo／短片）+（選填）ccusage 月報截圖含脈絡說明。</li>
+  <li><strong>怎麼篩</strong>：先看四個簡答與作品。沒有填寫問答的履歷，參考價值低、列為低優先。</li>
+  <li><strong>研究依據</strong>：2026 招募已從「who you are」轉向「what you have shipped」；GitHub／Demo／DECISIONS.md 是高訊號素材。</li>
+</ul>
+
+<h3>S1 — 角色對齊面談（30 分，HM/Recruiter）</h3>
+<ul>
+  <li><strong>目的</strong>：確認動機與溝通，並<strong>明確設定角色期待</strong>——這個職務將承接 Kuan／Jiang／Eva 的會議協調職責，會有相當比例的跨職能會議。務必確認候選人具備類似協調經驗，或清楚預期並能接受此定位（避免到職後落差）。</li>
+  <li>走過候選人的四個簡答、作品與（若有）ccusage 脈絡。</li>
+  <li><strong>賣點輸出</strong>：外部 SEO 顧問會議、AI 工具核銷、creator-first 文化、內部 Skill/Agent 系統。</li>
+</ul>
+<div class="context-note">
+  <p>此關直接落實你筆記中的要求：這個職務<strong>將承接</strong> Kuan／Jiang／Eva 那種「需要大量開會」的協調角色，因此要在最前段就確認候選人有類似經驗、或清楚預期會有這些會議。David 對「是否仍需此會議協調角色」的再評估結論，應在此關話術定稿前確認。</p>
+</div>
+
+<h3>S2 — AI-allowed 實作題（非同步 60–90 分）</h3>
+<ul>
+  <li><strong>形式</strong>：給一個「接近 vocus production 情境、且刻意藏有缺陷」的 Next.js repo（題目見第 5 節）。<strong>全程允許並鼓勵使用 AI</strong>，但須在 <code>PROMPTS.md</code> 附上使用的 prompt（延續舊 challenge「咒語能力」的精神並正式化）。</li>
+  <li><strong>交付</strong>：repo + README + <code>DECISIONS.md</code>（哪些是 AI 做的、哪些是你的判斷與驗證）。</li>
+  <li><strong>關鍵</strong>：此題<strong>必接 S3 的 live follow-up</strong>，由候選人親口解釋設計決策——這是分離「AI 寫的」與「候選人懂的」的核心機制。</li>
+  <li><strong>研究依據</strong>：Shopify／Meta 皆採「自帶工具、空白或破損 repo、看工作流」；Anthropic 指出「給無限時間人類仍勝過模型」，故以限時 + 後續追問維持效度。</li>
+</ul>
+
+<h3>S3 — Live 技術面（單場 90 分，三段）</h3>
+<table>
+<thead>
+<tr><th>段落</th><th>時間 / AI</th><th>做什麼</th><th>為何有效</th></tr>
+</thead>
+<tbody>
+<tr>
+  <td><strong>3a 實作追問 + 現場延伸</strong></td>
+  <td>30 分 / 允許</td>
+  <td>解釋 S2 決策，現場臨時追加一個新需求請其延伸</td>
+  <td>「現場延伸需求」AI 事先無法預測，分離理解 vs 代寫</td>
+</tr>
+<tr>
+  <td><strong>3b Code Review 反向題</strong></td>
+  <td>30 分 / 允許</td>
+  <td>給一段 AI 生成、藏缺陷的 Next.js PR，請其挑錯並說明會留什麼 comment</td>
+  <td>「批判程式碼」比「生成程式碼」更難作弊，最貼近日常工作</td>
+</tr>
+<tr>
+  <td><strong>3c 系統設計 + 無 AI 反思</strong></td>
+  <td>30 分 / 禁用</td>
+  <td>vocus 真實場景討論（快取／rendering 取捨）+ 純口頭確認底層知識</td>
+  <td>無 AI 環境驗證「沒有工具時的底層能力」，避免純 AI 操作員</td>
+</tr>
+</tbody>
+</table>
+<div class="context-note">
+  <p>3a/3b 允許 AI，觀察的是 <strong>prompt 顆粒度</strong>（叫 AI「直接解決」是負向；引導 AI 處理子任務、自己掌全局是正向）與 <strong>輸出驗證能力</strong>。3c 禁用 AI，確保候選人具備可獨立判斷的基礎。兩軸分離（有 AI 任務 + 無 AI 反思）是目前研究最推崇的設計。</p>
+</div>
+
+<h3>S4 — 跨職能協作 + 文化面（45 分）</h3>
+<ul>
+  <li>與 PM／設計／後端代表進行——這關也讓候選人實際感受未來協調工作的對象與會議節奏。</li>
+  <li>討論：候選人的 AI workflow 設計（簡答 3）、如何 review 同事的 AI 產出（簡答 4）、跨領域用 AI（簡答 2）。</li>
+  <li>確認 SEO/GEO 意識，以及「能在開發前期給 SEO 建議」的把關能力。</li>
+  <li>再次確認 IC 角色與外部顧問協作節奏的契合。</li>
+</ul>
+
+</div>
+</details>
+
+<!-- ============ SECTION 4 ============ -->
+<details>
+<summary><h2>4. 評分 Rubric（5 維度，結構化）</h2></summary>
+<div class="section-content">
+
+<div class="context-note">
+  <p>每個維度<strong>獨立計分</strong>，不讓「交出可運作的程式碼」遮掩底層能力不足（Karat 的 outcome／process 分離原則）。建議 1–4 分制 + 行為錨定描述，面試前對全體面試官做校準（Google re:Work 做法）。</p>
+</div>
+
+<table>
+<thead>
+<tr><th>維度</th><th>評估什麼</th><th>強信號</th><th>主要關卡</th></tr>
+</thead>
+<tbody>
+<tr>
+  <td><strong>D1 底層工程知識</strong></td>
+  <td>Next.js/React 執行模型、效能、a11y、SEO/GEO、cache 語意</td>
+  <td>無 AI 時能解釋「為何這樣設計／為何這行有 bug」</td>
+  <td>S3c</td>
+</tr>
+<tr>
+  <td><strong>D2 AI 協作能力</strong></td>
+  <td>prompt 顆粒度、workflow 設計、輸出驗證、何時不用 AI</td>
+  <td>把問題拆成 AI 可處理的子任務、能抓出 AI 幻覺</td>
+  <td>S2, S3a/3b</td>
+</tr>
+<tr>
+  <td><strong>D3 判斷力與品味</strong></td>
+  <td>review AI 產出、取捨、識別「表面正確但實質有問題」</td>
+  <td>在 100 行 AI 產出中快速定位問題並說明理由</td>
+  <td>S3b</td>
+</tr>
+<tr>
+  <td><strong>D4 系統思考</strong></td>
+  <td>前端架構、rendering strategy、caching、效能診斷 SOP</td>
+  <td>能在 vocus 業務約束下推理出合理架構取捨</td>
+  <td>S3c</td>
+</tr>
+<tr>
+  <td><strong>D5 溝通與協作</strong></td>
+  <td>解釋決策、跨團隊、SEO 把關意識、IC 角色契合</td>
+  <td>能對非技術同仁說清楚取捨；主動提 SEO 建議</td>
+  <td>S1, S4</td>
+</tr>
+</tbody>
+</table>
+
+<div class="context-note">
+  <p><strong>底層 vs AI 放大 的對照觀察表</strong>（每維度都看兩端）：</p>
+</div>
+<table>
+<thead>
+<tr><th>觀察點</th><th>底層能力信號</th><th>AI 放大能力信號</th></tr>
+</thead>
+<tbody>
+<tr><td>問題拆解</td><td>提 AI 前先說得出分析架構</td><td>把問題分解為 AI 可處理的子任務</td></tr>
+<tr><td>Code Review</td><td>說得出「為什麼這行有 bug」</td><td>快速掃 AI 產出並找到問題</td></tr>
+<tr><td>系統設計</td><td>知道 rendering strategy 取捨</td><td>用 AI 草擬方案後能批判性修正</td></tr>
+<tr><td>除錯</td><td>用 log／breakpoint 定位根因</td><td>寫有效 prompt 加速縮小範圍</td></tr>
+</tbody>
+</table>
+
+</div>
+</details>
+
+<!-- ============ SECTION 5 ============ -->
+<details>
+<summary><h2>5. 題庫與素材（可直接使用）</h2></summary>
+<div class="section-content">
+
+<h3>S0 四個結構化問答（隨履歷收）</h3>
+<ol>
+  <li>你目前日常的 AI 協作流程是如何？</li>
+  <li>你是否曾用 AI 嘗試不同領域（非慣用語言的開發，或行銷／設計／法務等）？請舉例與成果。</li>
+  <li>你是否能獨自設計一套開發 Workflow？請描述一個你設計過的流程。</li>
+  <li>你平時如何 review AI 的產出？以及如何 review 同事的程式碼（無論對方是否使用 AI）？</li>
+</ol>
+
+<h3>S2 實作題（重新設計的 F2E challenge）</h3>
+<div class="context-note">
+  <p>保留舊題「作者文章頁 + SSR + OG meta」的核心骨架（vocus 真實場景、staging API），但升級為「破損 repo 找 bug + AI 允許 + 後續追問」的現代設計。<strong>舊題的 staging API、user id 等可沿用；聯絡窗口需更新（勿用即將離職的 Eva）。</strong></p>
+</div>
+<p><strong>題目骨架</strong>：給一個已搭好但「刻意有缺陷」的 Next.js（Page Router）作者文章頁專案，串接 vocus staging API。請候選人：</p>
+<ul>
+  <li>修好一個 <strong>SSR / OG meta 注入的 bug</strong>（例：disable JS 後第一筆文章資料／OG 標題未正確 SSR 出來）</li>
+  <li>找出並修復一個 <strong>效能或 a11y 問題</strong>（例：圖片未優化導致 LCP 劣化、圖卡缺 alt／焦點順序錯誤）</li>
+  <li>（加分）依對 API 的理解擴增列表排序或分頁</li>
+</ul>
+<p><strong>規則</strong>：限時 60–90 分；全程可用 AI；附 <code>PROMPTS.md</code>（使用的 prompt）與 <code>DECISIONS.md</code>（哪些 AI 做、哪些你判斷）；README 說明啟動方式。<strong>此題交件後必接 S3a 的 live 追問。</strong></p>
+
+<h3>S3b Code Review 反向題（種入缺陷清單）</h3>
+<p>準備一個 AI 生成、看似可運作的 Next.js PR，種入以下類型缺陷請候選人挑出：</p>
+<ul>
+  <li><strong>效能</strong>：列表 render 出現 <code>O(n²)</code> 或重複請求（N+1）；缺 <code>key</code> 或 key 用 index</li>
+  <li><strong>SEO</strong>：OG／canonical／結構化資料缺漏或錯置；client-only 渲染導致 SSR 內容空白</li>
+  <li><strong>a11y</strong>：互動元素缺 label／role、對比不足、鍵盤不可達</li>
+  <li><strong>快取</strong>：<code>Cache-Control</code> 語意錯誤（該 no-store 卻 cache，或反之）</li>
+  <li><strong>正確性</strong>：邊界條件未處理、AI 幻覺出的不存在 API</li>
+</ul>
+
+<h3>S3c 系統設計 + 無 AI 反思題（vocus 真實場景）</h3>
+<ul>
+  <li>「設計 vocus 文章頁的快取策略：subscriber-only 內容用 SSR / ISR / CSR 如何取捨？CDN 層怎麼配？」</li>
+  <li>「文章頁 Web Vitals（LCP / INP / CLS）劣化時，你的診斷 SOP 是什麼？」</li>
+  <li>「AMP 文章頁的 CF 快取要注意什麼？」</li>
+  <li><strong>無 AI 純口頭</strong>：RSC（Server Component）執行邊界、INP 優化思路、<code>Cache-Control</code> 語意——確認可獨立判斷的底層知識。</li>
+</ul>
+
+</div>
+</details>
+
+<!-- ============ SECTION 6 ============ -->
+<details>
+<summary><h2>6. ccusage / token 用量信號：建議用法與風險（決策依據）</h2></summary>
+<div class="section-content">
+
+<div class="context-note">
+  <p>你筆記中提到希望候選人提供「最投入的一個月」連續 token 用量（參考 <code>ccusage</code>）。這點值得做，但<strong>怎麼用</strong>決定它是助力還是地雷。以下是中立的正反依據與建議。</p>
+</div>
+
+<h3>ccusage 是什麼</h3>
+<p><code>ccusage</code>（ryoppippi 開發）是本地 CLI，分析 Claude Code／Codex／Copilot CLI／Gemini CLI 等的 token 用量與成本，<strong>資料來自本地 JSONL、不上傳雲端</strong>，可出日／週／月報。它<strong>沒有官方分享或團隊比較功能</strong>，定位是個人成本管理工具——意即提交的截圖可被候選人自行編輯，無第三方驗證。</p>
+
+<h3>正反論點</h3>
+<table>
+<thead>
+<tr><th>支持（可作信號）</th><th>反對（作篩選條件的風險）</th></tr>
+</thead>
+<tbody>
+<tr>
+  <td>用量反映 AI 採用深度與投入度（Nvidia 黃仁勳提「token 作為薪酬第四支柱」）</td>
+  <td><strong>Goodhart／tokenmaxxing</strong>：Meta 內部排行榜出現「燒 281 億 token 卻零生產力」；指標一旦成為目標就失效</td>
+</tr>
+<tr>
+  <td>「token 效率」（少量達標）或可作問題框架化品質的代理</td>
+  <td><strong>效度背離</strong>：22,000 開發者數據顯示 AI 高用量伴隨缺陷率 +54%、code churn +861%；token 是輸入非成果</td>
+</tr>
+<tr>
+  <td>業界確有公司追蹤 AI 使用數據</td>
+  <td><strong>易 gaming</strong>：分割 session、灌長 prompt、重跑 agent 都能膨脹數字，且 ccusage 無法驗真偽</td>
+</tr>
+<tr>
+  <td>可作為面談的「脈絡開場」素材</td>
+  <td><strong>公平性</strong>：Claude Pro $20 vs Max $100/$200 額度差 5–10 倍，用量高可能只代表「工具買得起」</td>
+</tr>
+<tr>
+  <td>—</td>
+  <td><strong>隱私／法律</strong>：要求提交個人使用日誌涉個資；AI 輔助決策若致歧視結果，雇主仍負全責</td>
+</tr>
+</tbody>
+</table>
+
+<ul class="action-list">
+  <li class="action-item action-green">
+    <div class="action-title">建議做法：收，但只當脈絡，不以數字評分</div>
+    <div class="action-detail">在 JD 標示「選填、鼓勵」，要求附「在做什麼、成果是什麼」的一句話脈絡。面談時請候選人口頭解釋「用了什麼、用在哪、如何驗證」——評估的是 AI 協作的深度與判斷，不是 token 數字。</div>
+  </li>
+  <li class="action-item action-red">
+    <div class="action-title">避免：以 raw token 總量排序或設門檻</div>
+    <div class="action-detail">會誘發灌量、加劇工具取得的不平等，且與真實貢獻相關性低（Meta／Faros.ai 已驗證）。低用量不該扣分，高用量不該加分。</div>
+  </li>
+</ul>
+
+<blockquote>AI 會放大既有的工程判斷力。評估目標是找「判斷力強的人」，而不是「token 燒得多」或「prompt 寫得快」的人。</blockquote>
+
+</div>
+</details>
+
+<!-- ============ SECTION 7 ============ -->
+<details>
+<summary><h2>7. 舊版 vs 新版對照 + 待團隊對齊事項</h2></summary>
+<div class="section-content">
+
+<h3>舊 F2E challenge vs 新版實作題</h3>
+<table>
+<thead>
+<tr><th>面向</th><th>舊版（2022–2023）</th><th>新版</th></tr>
+</thead>
+<tbody>
+<tr><td>題型</td><td>從零做作者文章頁 + SSR + OG</td><td>破損 repo 找並修 SSR/OG + 效能/a11y bug</td></tr>
+<tr><td>AI 政策</td><td>可用、請附 prompt（但無後續驗證）</td><td>鼓勵用、附 prompt，<strong>必接 live 追問</strong></td></tr>
+<tr><td>鑑別重點</td><td>能否寫出功能</td><td>判斷力、review、決策、底層理解</td></tr>
+<tr><td>防作弊</td><td>無</td><td>現場延伸 + 無 AI 反思 + code review 反向題</td></tr>
+<tr><td>評分</td><td>綜合主觀</td><td>5 維結構化 rubric + 面試官校準</td></tr>
+<tr><td>角色定位</td><td>未明示</td><td>明示承接會議協調職責，面試確認協調經驗／預期</td></tr>
+</tbody>
+</table>
+
+<h3>待對齊／待辦</h3>
+<ul class="action-list">
+  <li class="action-item action-red">
+    <div class="action-title">David：是否仍需此會議協調型角色</div>
+    <div class="action-detail">本設計假設此職缺將承接 Kuan／Jiang／Eva 的會議協調職責。但 David 先前提過要重新評估是否仍需此會議協調角色——若決定縮減或取消，JD 的「工作方式」與面試角色對齊話術都需調整。請於 JD 定稿前確認。</div>
+  </li>
+  <li class="action-item action-red">
+    <div class="action-title">CEO：ccusage 信號的採用方式</div>
+    <div class="action-detail">建議「收、但只當脈絡，不以數字評分」（第 6 節）。需拍板是否列入、以何種措辭呈現於 JD。</div>
+  </li>
+  <li class="action-item action-yellow">
+    <div class="action-title">無法存取的舊 Notion 頁：Frontend Interview</div>
+    <div class="action-detail">「vocus F2E challenge」頁已成功讀取並納入對照；但「Frontend Interview」頁為私密工作區、需登入，本次無法存取。若其中有想保留的關卡，請頁面 owner 提供內容再補進對照。</div>
+  </li>
+  <li class="action-item action-yellow">
+    <div class="action-title">需準備的題庫資產</div>
+    <div class="action-detail">① S2 破損 repo（含種入的 SSR/OG + 效能/a11y bug）；② S3b 帶缺陷的 AI 生成 PR；③ S3c vocus 場景題卡 + 標準答題要點；④ rubric 評分表與面試官校準說明。</div>
+  </li>
+  <li class="action-item action-green">
+    <div class="action-title">聯絡窗口更新</div>
+    <div class="action-detail">舊 challenge 窗口為即將離職的 Eva（evayou@vocus.cc），所有對外文件需改為新窗口。</div>
+  </li>
+</ul>
+
+</div>
+</details>
+
+<!-- ============ SECTION 8 ============ -->
+<details>
+<summary><h2>8. 研究依據與來源（附錄）</h2></summary>
+<div class="section-content">
+
+<div class="context-note">
+  <p>以下為支撐本設計的網路研究重點與來源（2025–2026），分「現代面試流程」與「評估 AI 增強型工程師」兩線。</p>
+</div>
+
+<h3>各公司在 AI 時代的面試調整</h3>
+<ul>
+  <li><strong>Canva</strong>（2025/06）：移除傳統演算法題，改用 AI 協作的複雜情境題，評估「能否戰略性用 AI 同時保持全局掌控」。<a href="https://www.canva.dev/blog/engineering/yes-you-can-use-ai-in-our-interviews/">來源</a></li>
+  <li><strong>Meta</strong>：CoderPad 三面板 AI 輔助 coding，AI 只能在聊天欄、不能直接改碼；明確標記「過度依賴 AI 而不理解產出」為負向。<a href="https://www.hellointerview.com/blog/meta-ai-enabled-coding">來源</a></li>
+  <li><strong>Shopify</strong>：兩輪 AI coding、自帶 IDE、從空白 repo 開始；刻意觀察「AI 產出垃圾時候選人怎麼應對」。<a href="https://www.hellointerview.com/blog/shopify-ai-enabled-coding">來源</a></li>
+  <li><strong>Anthropic</strong>：刻意設計 AI 難以直接解的 out-of-distribution 題；「給無限時間人類仍勝過模型」，故以時間限制維持效度。<a href="https://www.anthropic.com/engineering/AI-resistant-technical-evaluations">來源</a></li>
+  <li><strong>Google</strong>：試行讓候選人用 Gemini，題型轉向多步驟、重問題拆解。<a href="https://careers.northeastern.edu/blog/2026/05/13/googles-ai-assisted-coding-interview-2026-guide/">來源</a></li>
+</ul>
+
+<h3>評分框架與效度理論</h3>
+<ul>
+  <li><strong>Karat — Human+AI Rubric</strong>：結果與過程分離、AI 使用本身是可觀察能力、錨定可觀察行為。<a href="https://karat.com/resource/human-ai-technical-interview-rubrics/">來源</a></li>
+  <li><strong>Schmidt &amp; Hunter (1998)</strong>：Work Sample r=.54（最強單一）、結構化面試 r=.51、非結構化 r=.38。<a href="https://www.plum.io/blog/schmidt-hunter-meta-analysis">來源</a></li>
+  <li><strong>Google re:Work</strong>：結構化面試一致優於非結構化、被拒滿意度 +35%、每輪省約 40 分。<a href="https://rework.withgoogle.com/intl/en/guides/a-guide-to-structured-interviewing-for-better-hiring-practices">來源</a></li>
+  <li><strong>BuiltIn</strong>：40–50% 候選人技術測驗滿分；五維評分（除錯／程式品質／判斷力／AI 熟練度／溝通）；code review 取代演算法題。<a href="https://builtin.com/articles/leetcode-replacement">來源</a></li>
+  <li><strong>CoderScreen</strong>：70% 雇主已測 AI 流暢度、僅 38% JD 明列 AI 技能。<a href="https://coderscreen.com/blog/state-of-technical-interviews-2025-ai">來源</a></li>
+</ul>
+
+<h3>前端考點權重變化</h3>
+<ul>
+  <li><strong>MockExperts（2026）</strong>：前端系統設計、Core Web Vitals（INP 取代 FID）、RSC 執行模型權重上升；背語法類淘汰。<a href="https://www.mockexperts.com/blog/frontend-engineering-2026-performance-dx">來源</a></li>
+  <li><strong>GEO 指南</strong>：傳統 SEO 之上新增「讓內容被 AI 引擎引用」的優化。<a href="https://www.digitalapplied.com/blog/geo-guide-generative-engine-optimization-2026">來源</a></li>
+</ul>
+
+<h3>評估 AI 協作能力 / 反作弊</h3>
+<ul>
+  <li><strong>HackerRank</strong>：2025 推出 prompt engineering 評量題。<a href="https://www.hackerrank.com/writing/designing-2025-ai-skills-assessment-hackerrank-prompt-engineering-rag-ai-interviewer">來源</a></li>
+  <li><strong>Fabric（19,368 場面試）</strong>：38.5% 候選人作弊、技術職 48%、61% 作弊者能通過傳統標準。<a href="https://fabrichq.ai/blogs/state-of-ai-interview-cheating-in-2026-insights-from-19-368-interviews">來源</a></li>
+  <li><strong>Anna J McDougall</strong>：「先做後說」——任務階段全程 AI、反思階段禁 AI 純口頭，區分 implementer 與 knowledge-haver。<a href="https://annajmcdougall.medium.com/you-cant-outrun-ai-in-tech-interviews-so-we-designed-around-it-018ae0ac4ddd">來源</a></li>
+  <li><strong>Charles Chen</strong>：用 code review 取代 LeetCode 的七種題型。<a href="https://chrlschn.medium.com/interviews-in-the-age-of-ai-ditch-leetcode-try-code-reviews-instead-9639d7bfd9d4">來源</a></li>
+</ul>
+
+<h3>token 用量信號 / AI 時代核心價值</h3>
+<ul>
+  <li><strong>ccusage</strong>（工具本體）。<a href="https://github.com/ryoppippi/ccusage">GitHub</a></li>
+  <li><strong>Faros.ai — Tokenmaxxing</strong>：token 消耗 ≠ 生產力；高用量伴隨缺陷率上升。<a href="https://www.faros.ai/blog/tokenmaxxing">來源</a></li>
+  <li><strong>Goodhart's Law 在 AI 採用</strong>：Meta／Amazon 案例。<a href="https://victorinollc.com/thinking/goodhart-ai-adoption-tokenmaxxing-mainstream">來源</a></li>
+  <li><strong>Nvidia 黃仁勳</strong>：token 作為薪酬第四支柱（支持端論點）。<a href="https://www.cnbc.com/2026/03/20/nvidia-ai-agents-tokens-human-workers-engineer-jobs-unemployment-jensen-huang.html">來源</a></li>
+  <li><strong>Addy Osmani</strong>：The Factory Model／Agentic Engineering——AI 放大既有工程品質，品味與規格品質是稀缺技能。<a href="https://addyosmani.com/blog/factory-model/">來源</a></li>
+  <li><strong>招募倫理</strong>：AI 招募的偏誤與隱私。<a href="https://mitratech.com/resource-hub/blog/the-ethics-of-ai-in-recruiting-bias-privacy-and-the-future-of-hiring/">來源</a></li>
+</ul>
+
+</div>
+</details>
+
+<hr style="border:none;border-top:4px solid var(--fg);margin-top:40px;">
+<footer class="text-muted" style="padding-top:16px;">
+  vocus 前端面試流程翻修草案 · 2026-06-03 · 內部審閱用，發布前請移除所有「內部註」與脈絡框
+</footer>
+<script>
+(function() {
+  var os = document.querySelector('.overall-status');
+  if (os) {
+    var tb = document.createElement('div');
+    tb.className = 'toolbar global-toolbar';
+    tb.innerHTML = '<button data-toggle-all="open">展開全部</button><button data-toggle-all="close">收合全部</button>';
+    os.insertAdjacentElement('afterend', tb);
+  }
+  document.addEventListener('click', function(e) {
+    var btn = e.target.closest('[data-toggle-all]');
+    if (!btn) return;
+    var open = btn.dataset.toggleAll === 'open';
+    document.querySelectorAll('details').forEach(function(d) { d.open = open; });
+  });
+})();
+</script>
+</body>
+</html>
