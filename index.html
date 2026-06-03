@@ -564,6 +564,67 @@ p code, li code, td code { background: var(--muted); padding: 2px 5px; }
   <li><strong>正確性</strong>：邊界條件未處理、AI 幻覺出的不存在 API</li>
 </ul>
 
+<h3>S3b 範例題（讀 3 分鐘 / 解 10 分鐘）：抽 helper 後的沉默回歸</h3>
+<div class="context-note">
+  <p>此題抽象自 vocus-web-ui 真實 P0（article-SSR helper 抽取造成死碼回歸，PR #7102 → #7600）。Extract Function 時 helper 在「不適用」case 仍回傳 truthy 值，caller 的 <code>if (result)</code> 永遠成立、殺掉 fallback → 舊文章靜默 render 錯誤、happy path 測試全綠。<strong>正是 AI 抽 helper／重構最常引入、且 quick review 看不出的 bug——考的不是「能不能寫」，是「能不能看穿」。</strong></p>
+</div>
+<p><strong>對應 rubric</strong>：D3 判斷力（主）／D1 底層／D2 review AI 產出。<strong>AI 政策</strong>：可開放，但計分重點在「能否口頭說清楚為什麼是 bug」，不是貼修法。</p>
+
+<h4>給候選人的程式碼</h4>
+<pre><code>// utils/article/prepareArticleContent.js
+// 把文章資料整理成 SSR 要用的 [html, toc]
+export function prepareArticleContent(article) {
+  // case A：已發佈且有結構化內容
+  if (isPublished(article) &amp;&amp; article.contentObj) {
+    const { html, toc } = renderFromObj(article.contentObj);
+    return [html, toc];
+  }
+  // case B：純草稿
+  if (article.draftObj) {
+    const { html, toc } = renderFromObj(article.draftObj);
+    return [html, toc];
+  }
+  // case C：兩者皆無（舊資料 / 空文章）→ 交給後面的 fallback 處理
+  return [article, []];
+}</code></pre>
+<pre><code>// pages/article/[id].js  （getServerSideProps 內）
+const result = prepareArticleContent(article);
+if (result) {
+  const [html, toc] = result;
+  return { props: { html, toc } };
+}
+
+// fallback：舊資料用預設 renderer，並重新掃 heading 產生 TOC
+const html = renderDefault(article);
+const toc = buildTocFromHtml(html);
+return { props: { html, toc } };</code></pre>
+<p><strong>題幹線索</strong>：「published 文章和草稿都正常，但站上一批舊文章內文變成亂碼、目錄(TOC)永遠空白。單元測試全綠。請找出原因並修。」</p>
+
+<h4>預期答案（10 分鐘內）</h4>
+<ol>
+  <li><strong>定位</strong>：case C <code>return [article, []]</code> 是非空陣列 → truthy。caller <code>if (result)</code> 三種 case 都成立，fallback（<code>renderDefault</code> + <code>buildTocFromHtml</code>）變死碼；舊文章把整個 <code>article</code> 物件當 html（render 成亂碼），TOC 拿到 <code>[]</code>。</li>
+  <li><strong>修法</strong>：helper「不適用」case 改回傳 sentinel <code>null</code>，caller 改判 <code>if (result !== null)</code>，fallback 復活。</li>
+</ol>
+
+<h4>評分（1–4，行為錨定）</h4>
+<table>
+<thead><tr><th>分數</th><th>行為</th></tr></thead>
+<tbody>
+<tr><td class="num">1</td><td>看不出問題，或只說「再加個 if 擋 case C」沒打到 truthy 根因</td></tr>
+<tr><td class="num">2</td><td>找到 case C 有問題，但用 <code>if (result.length)</code> / <code>if (result[0])</code> 等脆弱修法</td></tr>
+<tr><td class="num">3</td><td>正確指出「truthy 回傳殺掉 fallback」，改 nullable sentinel + <code>!== null</code></td></tr>
+<tr><td class="num">4</td><td>加上：說得出「為什麼測試全綠卻線上壞」（happy path 不覆蓋 case C）、指出 <code>[article, []]</code> 用同一 array shape 裝不同語意是 type smell、主動說要補 case C 單元測試</td></tr>
+</tbody>
+</table>
+
+<h4>現場延伸追問（anti-cheat，AI 事先猜不到）</h4>
+<blockquote>「如果我再加 case D：文章同時有 contentObj 和 draftObj，你的 helper 簽章要怎麼改，才能讓這類『不適用／衝突』情況不會再被 caller 誤判成成功？」</blockquote>
+<p>好的候選人會把回傳型別從 <code>[html, toc]</code>（truthy 陷阱）改成可明確區分的形狀（如 <code>{ status, html, toc }</code> 或 discriminated union），而不是再靠陣列——驗證他有沒有把根因一般化，而不只補一個 if。</p>
+
+<div class="context-note">
+  <p><strong>備援題</strong>（可輪替避免外流被背，皆 KB 真實案例）：① logger <code>console.error(err)</code> 經 pino override 變 <code>[object Object]</code>、stack 全丟 → 線上錯誤無法 debug（考錯誤序列化／觀測性意識）；② SSR catch 把 <code>error.stack</code> 塞進 redirect URL + 回 307 而非 <code>notFound: true</code> → 內部路徑/SQL 外洩 + SEO 持續索引壞網址（考安全 + SEO + HTTP 語意，稍難版）。</p>
+</div>
+
 <h3>S3c 系統設計 + 無 AI 反思題（vocus 真實場景）</h3>
 <ul>
   <li>「設計 vocus 文章頁的快取策略：subscriber-only 內容用 SSR / ISR / CSR 如何取捨？CDN 層怎麼配？」</li>
