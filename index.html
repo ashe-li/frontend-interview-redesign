@@ -332,8 +332,14 @@ p code, li code, td code { background: var(--muted); padding: 2px 5px; }
       <li>(4) 你平時如何 review AI 的產出？以及如何 review 同事的程式碼（無論對方是否使用 AI）？</li>
     </ul>
   </li>
-  <li>一個你引以為傲的功能或成就：附 GitHub repo／Demo／2 分鐘短片皆可。若有 AI 參與，請說明哪些是 AI、哪些是你的判斷與驗證。</li>
-  <li>（選填，鼓勵提供）你「最投入的一個月」AI 開發工具用量紀錄（例如 <code>ccusage</code> 月報截圖），並用一句話說明：當時在做什麼、成果是什麼。<strong>我們不以數字多寡評分，只想了解你與 AI 協作的脈絡。</strong></li>
+  <li><strong>一個你引以為傲的功能或成就</strong>：用你方便分享的形式皆可——公開 GitHub repo／線上 Demo／2 分鐘短片；若是公司專案不便公開，可改提供去識別化的架構與決策說明、或個人 side project／OSS 貢獻／技術文章。若有 AI 參與，請說明哪些是 AI、哪些是你的判斷與驗證。</li>
+  <li>（選填，鼓勵提供）<strong>你實際如何使用 AI 的證據</strong>——任何形式皆可，不限工具、不需公司帳號：
+    <ul>
+      <li>有個人 CLI 用量（Claude Code／Codex／Copilot CLI）→ <code>ccusage</code> 月報截圖最直接（可挑你「最投入的一個月」）</li>
+      <li>主要用網頁版（ChatGPT／Claude.ai）→ 一段代表性對話截圖，或你常用的 prompt</li>
+      <li>只透過公司帳號、無法匯出 → 用幾句話描述 + 1–2 個你實際用過的 prompt 即可</li>
+    </ul>
+    附上時請用一句話說明：當時在做什麼、成果是什麼。<strong>我們不以數字多寡評分，也不因為你沒有可分享的資料而扣分</strong>——現場的 live AI pairing（見流程 S2）是每個人公平展示的共同關卡。</li>
 </ol>
 </div>
 
@@ -408,10 +414,13 @@ p code, li code, td code { background: var(--muted); padding: 2px 5px; }
 
 <h3>S0 — 履歷 + 結構化問答 + AI 作品（初篩）</h3>
 <ul>
-  <li><strong>收什麼</strong>：履歷 + 四個簡答（見第 5 節）+ 一份引以為傲的 AI 開發成果（repo／demo／短片）+（選填）ccusage 月報截圖含脈絡說明。</li>
+  <li><strong>收什麼</strong>：履歷 + 四個簡答（見第 5 節）+ 一份引以為傲的成果（repo／demo／短片，或公司專案的去識別化說明）+（選填）AI 使用證據（ccusage 月報／web 對話截圖／常用 prompt 皆可，不需公司帳號）。</li>
   <li><strong>怎麼篩</strong>：先看四個簡答與作品。沒有填寫問答的履歷，參考價值低、列為低優先。</li>
   <li><strong>研究依據</strong>：2026 招募已從「who you are」轉向「what you have shipped」；GitHub／Demo／DECISIONS.md 是高訊號素材。</li>
 </ul>
+<div class="context-note">
+  <p><strong>沒有可分享資料怎麼辦</strong>：核心漏斗是「有在用 AI → 有使用脈絡 → 聊得出怎麼用更好」。但不是每個人都有公開作品或可匯出的用量（公司帳號不能匯出、只用網頁版、NDA）。因此作品與用量<strong>一律選填、任何形式皆可、不需公司帳號</strong>；真正公平的共同關卡是 <strong>S2 live AI pairing</strong>——即使應徵階段完全沒資料，也能在現場直接產生可觀察的 AI 使用過程，再據此討論「怎麼用更好」。<strong>不因「沒資料」淘汰任何人</strong>（真正的初篩門檻是四個簡答有沒有認真填）。</p>
+</div>
 
 <h3>S1 — 角色對齊面談（30 分，HM/Recruiter）</h3>
 <ul>
@@ -796,7 +805,7 @@ export async function getServerSideProps({ params, req, res }) {
 <ul class="action-list">
   <li class="action-item action-green">
     <div class="action-title">建議做法：收，但只當脈絡，不以數字評分</div>
-    <div class="action-detail">在 JD 標示「選填、鼓勵」，要求附「在做什麼、成果是什麼」的一句話脈絡。面談時請候選人口頭解釋「用了什麼、用在哪、如何驗證」——評估的是 AI 協作的深度與判斷，不是 token 數字。</div>
+    <div class="action-detail">在 JD 標示「選填、鼓勵」，且<strong>接受任何形式的使用證據（ccusage／web 對話截圖／常用 prompt，不需公司帳號）</strong>，避免只認 CLI 用量造成的不公平。面談時請候選人口頭解釋「用了什麼、用在哪、如何驗證」。<strong>沒有可分享資料者不扣分</strong>——由 S2 live AI pairing 現場產生可觀察的使用過程補足，解決「沒資料就無從討論」。評估的是 AI 協作的深度與判斷，不是 token 數字。</div>
   </li>
   <li class="action-item action-red">
     <div class="action-title">避免：以 raw token 總量排序或設門檻</div>
