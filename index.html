@@ -245,12 +245,6 @@ p code, li code, td code { background: var(--muted); padding: 2px 5px; }
   <li><strong>公平與可稽核</strong>：採結構化 rubric 評分。研究顯示結構化面試讓被拒候選人滿意度提升 35%、預測效度高於非結構化面試 34%，也降低偏誤與法律風險。</li>
 </ul>
 
-<div class="context-note">
-  <p><strong>需要 CEO／David 拍板的兩件事</strong>（細節見第 7 節）：</p>
-  <p>1. 本設計假設此職缺<strong>承接</strong> Kuan／Jiang／Eva 的會議協調職責（讓既有同仁從中釋出）。但 David 先前提過要重新評估「是否還需要這個會議協調型角色」——若 David 決定縮減或取消此會議職責，JD 的「工作方式」與面試的角色對齊話術都需調整。</p>
-  <p>2. 是否要求候選人附 ccusage（AI token 用量）紀錄。建議「收、但只當脈絡，不以數字多寡評分」——原因見第 6 節（有 gaming、公平性與效度風險）。</p>
-</div>
-
 </div>
 </details>
 
@@ -362,17 +356,17 @@ p code, li code, td code { background: var(--muted); padding: 2px 5px; }
   <td>角色期待不合 → 止步</td>
 </tr>
 <tr>
-  <td><strong>S2 AI-allowed 實作題</strong></td>
-  <td>非同步 60–90 分</td>
-  <td>鼓勵用、需附 prompt</td>
-  <td>工作流、決策、產出品質</td>
-  <td>無法運作／無決策痕跡</td>
+  <td><strong>S2 Live AI pairing coding</strong></td>
+  <td>現場 45 分</td>
+  <td>全程可用、螢幕共享</td>
+  <td>工作流、決策、AI 出錯時的反應、驗證習慣</td>
+  <td>過程品質過低</td>
 </tr>
 <tr>
-  <td><strong>S3 Live 技術面（單場集中）</strong></td>
-  <td>90 分</td>
+  <td><strong>S3 Live 技術深談</strong></td>
+  <td>60 分</td>
   <td>分段允許／禁用</td>
-  <td>判斷力、code review、系統設計、底層知識</td>
+  <td>code review 判斷、系統設計、底層知識</td>
   <td>rubric 任一維度過低</td>
 </tr>
 <tr>
@@ -393,7 +387,7 @@ p code, li code, td code { background: var(--muted); padding: 2px 5px; }
 </table>
 
 <div class="context-note">
-  <p>整條流程 live 接觸控制在 <strong>3 場（S1 / S3 / S4）</strong>，且 S3 把實作追問、code review、系統設計集中在單一 90 分鐘 block——降低候選人的時程負擔、加快 time-to-offer。</p>
+  <p>技術評估以 <strong>S2 live AI pairing</strong> 為核心（現場看協作過程，作弊問題直接消除），S3 補 code review 反向題 + 系統設計。live 接觸共 4 場（S1 對齊 / S2 pairing / S3 深談 / S4 協作），單關都精簡，降低候選人時程負擔。</p>
 </div>
 
 <div class="tier-divider">逐關設計</div>
@@ -415,30 +409,24 @@ p code, li code, td code { background: var(--muted); padding: 2px 5px; }
   <p>此關直接落實你筆記中的要求：這個職務<strong>將承接</strong> Kuan／Jiang／Eva 那種「需要大量開會」的協調角色，因此要在最前段就確認候選人有類似經驗、或清楚預期會有這些會議。David 對「是否仍需此會議協調角色」的再評估結論，應在此關話術定稿前確認。</p>
 </div>
 
-<h3>S2 — AI-allowed 實作題（非同步 60–90 分）</h3>
+<h3>S2 — Live AI pairing coding（現場 ~45 分）</h3>
 <ul>
-  <li><strong>形式</strong>：給一個「接近 vocus production 情境、且刻意藏有缺陷」的 Next.js repo（題目見第 5 節）。<strong>全程允許並鼓勵使用 AI</strong>，但須在 <code>PROMPTS.md</code> 附上使用的 prompt（延續舊 challenge「咒語能力」的精神並正式化）。</li>
-  <li><strong>交付</strong>：repo + README + <code>DECISIONS.md</code>（哪些是 AI 做的、哪些是你的判斷與驗證）。</li>
-  <li><strong>關鍵</strong>：此題<strong>必接 S3 的 live follow-up</strong>，由候選人親口解釋設計決策——這是分離「AI 寫的」與「候選人懂的」的核心機制。</li>
-  <li><strong>研究依據</strong>：Shopify／Meta 皆採「自帶工具、空白或破損 repo、看工作流」；Anthropic 指出「給無限時間人類仍勝過模型」，故以限時 + 後續追問維持效度。</li>
+  <li><strong>形式</strong>：螢幕共享，候選人用自己平常的工具（Claude Code／Cursor／Copilot），面試官當 pair partner + 觀察者。同一個 starter repo（已備好、故意埋 client-fetch）。重新設計的 F2E challenge，<strong>完整協定、starter repo、curveball 階梯、觀察 rubric 見第 5 節</strong>。</li>
+  <li><strong>為何改 live</strong>：現場觀察讓作弊問題直接消除，且看得到 async take-home 看不到的——prompt 顆粒度、AI 出錯時的反應、驗證習慣。重點從「成品」轉成「過程」。</li>
+  <li><strong>分段</strong>：暖身 5 分 → 核心 SSR/OG 20 分 → curveball 加碼 10 分 → 關 AI 反思 10 分（反思環節取代舊版的 take-home 後追問）。</li>
+  <li><strong>研究依據</strong>：Shopify（自帶工具、破損 repo、刻意讓 AI 產生垃圾以觀察反應）、Meta（prompt 顆粒度）、Anna McDougall（do-then-reflect、螢幕共享、ascending difficulty + reflection）。</li>
 </ul>
 
-<h3>S3 — Live 技術面（單場 90 分，三段）</h3>
+<h3>S3 — Live 技術深談（60 分，兩段）</h3>
 <table>
 <thead>
 <tr><th>段落</th><th>時間 / AI</th><th>做什麼</th><th>為何有效</th></tr>
 </thead>
 <tbody>
 <tr>
-  <td><strong>3a 實作追問 + 現場延伸</strong></td>
-  <td>30 分 / 允許</td>
-  <td>解釋 S2 決策，現場臨時追加一個新需求請其延伸</td>
-  <td>「現場延伸需求」AI 事先無法預測，分離理解 vs 代寫</td>
-</tr>
-<tr>
   <td><strong>3b Code Review 反向題</strong></td>
   <td>30 分 / 允許</td>
-  <td>給一段 AI 生成、藏缺陷的 Next.js PR，請其挑錯並說明會留什麼 comment</td>
+  <td>給一段 AI 生成、藏缺陷的 Next.js PR（題庫見第 5 節），請其挑錯並說明會留什麼 comment</td>
   <td>「批判程式碼」比「生成程式碼」更難作弊，最貼近日常工作</td>
 </tr>
 <tr>
@@ -450,7 +438,7 @@ p code, li code, td code { background: var(--muted); padding: 2px 5px; }
 </tbody>
 </table>
 <div class="context-note">
-  <p>3a/3b 允許 AI，觀察的是 <strong>prompt 顆粒度</strong>（叫 AI「直接解決」是負向；引導 AI 處理子任務、自己掌全局是正向）與 <strong>輸出驗證能力</strong>。3c 禁用 AI，確保候選人具備可獨立判斷的基礎。兩軸分離（有 AI 任務 + 無 AI 反思）是目前研究最推崇的設計。</p>
+  <p>原「3a 實作追問 + 現場延伸」已併入 S2 live pairing（反思 + curveball 環節）。S3 聚焦兩件 S2 較難涵蓋的：3b 批判他人 AI 產出的判斷力（題 1–4 範例題）、3c 無 AI 時的底層知識。3b 允許 AI、觀察 prompt 顆粒度與輸出驗證；3c 禁用 AI，確保可獨立判斷的基礎。</p>
 </div>
 
 <h3>S4 — 跨職能協作 + 文化面（45 分）</h3>
@@ -488,7 +476,7 @@ p code, li code, td code { background: var(--muted); padding: 2px 5px; }
   <td><strong>D2 AI 協作能力</strong></td>
   <td>prompt 顆粒度、workflow 設計、輸出驗證、何時不用 AI</td>
   <td>把問題拆成 AI 可處理的子任務、能抓出 AI 幻覺</td>
-  <td>S2, S3a/3b</td>
+  <td>S2, S3b</td>
 </tr>
 <tr>
   <td><strong>D3 判斷力與品味</strong></td>
@@ -542,17 +530,63 @@ p code, li code, td code { background: var(--muted); padding: 2px 5px; }
   <li>你平時如何 review AI 的產出？以及如何 review 同事的程式碼（無論對方是否使用 AI）？</li>
 </ol>
 
-<h3>S2 實作題（重新設計的 F2E challenge）</h3>
+<h3>S2 Live AI pairing coding（現場 ~45 分，重新設計的 F2E challenge）</h3>
 <div class="context-note">
-  <p>保留舊題「作者文章頁 + SSR + OG meta」的核心骨架（vocus 真實場景、staging API），但升級為「破損 repo 找 bug + AI 允許 + 後續追問」的現代設計。<strong>舊題的 staging API、user id 等可沿用；聯絡窗口需更新（勿用即將離職的 Eva）。</strong></p>
+  <p>舊 F2E challenge（作者文章頁 + SSR + OG，預期工時一天）改為<strong>現場 live AI pairing</strong>：螢幕共享、候選人用自己平常的工具（Claude Code／Cursor／Copilot），面試官當 pair partner + 觀察者。作弊問題直接消除，重點從「交出的成品」轉成「協作的過程」。保留舊題核心骨架（彭顯惠作者頁、staging API），但用 starter repo 把 boilerplate 全給好，只留 SSR/OG 核心。<strong>staging API／user id 可沿用；聯絡窗口需更新（勿用即將離職的 Eva）。</strong></p>
 </div>
-<p><strong>題目骨架</strong>：給一個已搭好但「刻意有缺陷」的 Next.js（Page Router）作者文章頁專案，串接 vocus staging API。請候選人：</p>
+<p><strong>開場明講</strong>：「完成不是重點，過程才是。把我當 pair，平常怎麼做就怎麼做，邊做邊說。」</p>
+
+<h4>Starter repo（我們準備，候選人不花時間 setup）</h4>
 <ul>
-  <li>修好一個 <strong>SSR / OG meta 注入的 bug</strong>（例：disable JS 後第一筆文章資料／OG 標題未正確 SSR 出來）</li>
-  <li>找出並修復一個 <strong>效能或 a11y 問題</strong>（例：圖片未優化導致 LCP 劣化、圖卡缺 alt／焦點順序錯誤）</li>
-  <li>（加分）依對 API 的理解擴增列表排序或分頁</li>
+  <li>Next.js Page Router，<code>pnpm dev</code> 可直接跑</li>
+  <li><code>lib/api.js</code>：已封裝 <code>getArticles({ userId, page, num })</code> 打 staging <code>/api/articles</code></li>
+  <li><code>pages/author/[userId].js</code>：<strong>目前在 <code>useEffect</code> client-side 抓資料（故意埋的）</strong>——畫面正常，但 disable JS 空白、OG 空</li>
+  <li><code>components/ArticleCard.jsx</code>：圖卡（title／abstract／thumbnailUrl），已套基本樣式</li>
 </ul>
-<p><strong>規則</strong>：限時 60–90 分；全程可用 AI；附 <code>PROMPTS.md</code>（使用的 prompt）與 <code>DECISIONS.md</code>（哪些 AI 做、哪些你判斷）；README 說明啟動方式。<strong>此題交件後必接 S3a 的 live 追問。</strong></p>
+
+<h4>分段（~45 分）</h4>
+<table>
+<thead><tr><th>階段</th><th>時間</th><th>做什麼</th><th>面試官</th></tr></thead>
+<tbody>
+<tr><td>0 暖身</td><td>5 分</td><td>clone、跑 dev、選 AI 工具</td><td>閒聊降緊張</td></tr>
+<tr><td>1 核心</td><td>20 分</td><td>列表改 SSR + 第一筆 OG meta（disable JS 看得到）</td><td>只觀察、不引導</td></tr>
+<tr><td>2 加碼</td><td>10 分</td><td>依節奏抽 curveball</td><td>注入新需求</td></tr>
+<tr><td>3 反思</td><td>10 分</td><td>手離鍵盤、關 AI，口頭問決策</td><td>分離會做 vs 真懂</td></tr>
+</tbody>
+</table>
+
+<h4>Curveball 階梯（依速度往上抽）</h4>
+<ul>
+  <li><strong>L1 核心</strong>：SSR 列表 + 第一筆 OG。</li>
+  <li><strong>L2 防禦</strong>：第一篇 <code>thumbnailUrl</code> 為 null 時 OG image fallback——看有沒有防 AI 的 happy-path-only 產出。</li>
+  <li><strong>L3 系統</strong>：「舊需求每次重整隨機 4 篇——SSR + 隨機 + CDN 快取會打架，怎麼設計？」</li>
+  <li><strong>L4 資深</strong>：「若第一篇是草稿、無 published 內文，SSR/OG 會怎樣？」→ 接題 1 的 fallback 判斷。</li>
+</ul>
+<div class="context-note">
+  <p>若 AI 3 分鐘 one-shot 完 L1，不是壞事——往上抽 curveball + 加重反思照樣分得出高下。題目小是刻意的，escalation 才是鑑別力來源。</p>
+</div>
+
+<h4>面試官 live 觀察 rubric（看過程，對齊 D1–D5）</h4>
+<table>
+<thead><tr><th>觀察點</th><th>負向</th><th>正向</th><th>維度</th></tr></thead>
+<tbody>
+<tr><td>讀碼順序</td><td>沒看既有 code 就 prompt</td><td>先讀 <code>[userId].js</code>／<code>api.js</code> 才動手</td><td>D1</td></tr>
+<tr><td>prompt 顆粒度</td><td>「幫我把這題做完」</td><td>拆成子任務餵 AI</td><td>D2</td></tr>
+<tr><td>AI 產出評估</td><td>paste-and-pray</td><td>讀 AI 改了什麼、抓到又寫成 client-fetch／幻覺 API</td><td>D3</td></tr>
+<tr><td>AI 出錯反應</td><td>卡死、反覆同 prompt</td><td>換策略、回去讀 code、自己接手</td><td>D3</td></tr>
+<tr><td>驗證習慣</td><td>「看起來好了」就停</td><td>主動 disable JS／view-source／curl 驗 OG</td><td>D1·D3</td></tr>
+<tr><td>邊做邊說</td><td>沉默</td><td>講出取捨與假設</td><td>D5</td></tr>
+</tbody>
+</table>
+
+<h4>驗收（90 秒可驗，客觀）</h4>
+<pre><code>curl -s &lt;url&gt; | grep 'og:title'        # 應含第一篇標題，非空
+curl -s &lt;url&gt; | grep -c 'article-card'  # HTML 內應有 4 張圖卡（非 JS render）</code></pre>
+<p>+ DevTools disable JS → reload → 圖卡內容仍在。</p>
+
+<div class="context-note">
+  <p><strong>面試官守則</strong>：前 20 分不要救（AI 給垃圾、走錯路正是觀察點，Shopify 做法）；反思階段關 AI 問「為什麼這樣決定／哪一刻不信任 AI／重來會怎麼改」；每位面試官用同一份 curveball + 觀察表（結構化避免主觀漂移）。計分過程與成果分開算（Karat）：AI 一鍵寫完但說不出為什麼 = 低分；沒寫完但拆解／驗證／判斷到位 = 高分。研究依據：Shopify、Meta、Anna McDougall（do-then-reflect + ascending difficulty）。</p>
+</div>
 
 <h3>S3b Code Review 反向題（種入缺陷清單）</h3>
 <p>準備一個 AI 生成、看似可運作的 Next.js PR，種入以下類型缺陷請候選人挑出：</p>
@@ -603,7 +637,7 @@ return { props: { html, toc } };</code></pre>
 <h4>預期答案（10 分鐘內）</h4>
 <ol>
   <li><strong>定位</strong>：case C <code>return [article, []]</code> 是非空陣列 → truthy。caller <code>if (result)</code> 三種 case 都成立，fallback（<code>renderDefault</code> + <code>buildTocFromHtml</code>）變死碼；舊文章把整個 <code>article</code> 物件當 html（render 成亂碼），TOC 拿到 <code>[]</code>。</li>
-  <li><strong>修法</strong>：helper「不適用」case 改回傳 sentinel <code>null</code>，caller 改判 <code>if (result !== null)</code>，fallback 復活。</li>
+  <li><strong>修法（最小且最穩）</strong>：helper「不適用」case 改回傳 falsy 的 <code>null</code>（或 <code>undefined</code>），caller <strong>維持原本的 <code>if (result)</code></strong> 即可——合法回傳一律是陣列（恆 truthy），falsy 就落到 fallback，caller 一行都不用改。<br><em>陷阱：若回 <code>undefined</code> 卻把 caller 改成 <code>if (result !== null)</code>，<code>undefined !== null</code> 為 true → 解構 undefined 直接 throw；<code>!== null</code> 只能配 <code>null</code>。</em></li>
 </ol>
 
 <h4>評分（1–4，行為錨定）</h4>
@@ -612,7 +646,7 @@ return { props: { html, toc } };</code></pre>
 <tbody>
 <tr><td class="num">1</td><td>看不出問題，或只說「再加個 if 擋 case C」沒打到 truthy 根因</td></tr>
 <tr><td class="num">2</td><td>找到 case C 有問題，但用 <code>if (result.length)</code> / <code>if (result[0])</code> 等脆弱修法</td></tr>
-<tr><td class="num">3</td><td>正確指出「truthy 回傳殺掉 fallback」，改 nullable sentinel + <code>!== null</code></td></tr>
+<tr><td class="num">3</td><td>正確指出「truthy 回傳殺掉 fallback」，case C 改回 falsy（<code>null</code>/<code>undefined</code>）讓 <code>if (result)</code> 落到 fallback</td></tr>
 <tr><td class="num">4</td><td>加上：說得出「為什麼測試全綠卻線上壞」（happy path 不覆蓋 case C）、指出 <code>[article, []]</code> 用同一 array shape 裝不同語意是 type smell、主動說要補 case C 單元測試</td></tr>
 </tbody>
 </table>
@@ -624,6 +658,73 @@ return { props: { html, toc } };</code></pre>
 <div class="context-note">
   <p><strong>備援題</strong>（可輪替避免外流被背，皆 KB 真實案例）：① logger <code>console.error(err)</code> 經 pino override 變 <code>[object Object]</code>、stack 全丟 → 線上錯誤無法 debug（考錯誤序列化／觀測性意識）；② SSR catch 把 <code>error.stack</code> 塞進 redirect URL + 回 307 而非 <code>notFound: true</code> → 內部路徑/SQL 外洩 + SEO 持續索引壞網址（考安全 + SEO + HTTP 語意，稍難版）。</p>
 </div>
+
+<h3>S3b 範例題 2：客戶端才抓資料，爬蟲與 no-JS 看到空白（SSR / SEO）</h3>
+<div class="context-note">
+  <p><strong>出處</strong>：vocus F2E challenge 核心驗收（disable JS 要看得到資料 + OG）、<code>/article</code> SSR 爬蟲 504 RCA、CF-cached OG 驗證 pattern。<strong>對應 rubric</strong>：D1 底層（rendering model）、D4 系統、SEO 把關（D5）。</p>
+</div>
+<pre><code>// pages/article/[id].js
+export default function ArticlePage() {
+  const { query } = useRouter();
+  const [article, setArticle] = useState(null);
+
+  useEffect(() =&gt; {
+    if (!query.id) return;
+    fetch(`/api/articles/${query.id}`).then(r =&gt; r.json()).then(setArticle);
+  }, [query.id]);
+
+  return (
+    &lt;&gt;
+      &lt;Head&gt;
+        &lt;title&gt;{article?.title ?? "vocus"}&lt;/title&gt;
+        &lt;meta property="og:title" content={article?.title ?? ""} /&gt;
+        &lt;meta property="og:description" content={article?.abstract ?? ""} /&gt;
+      &lt;/Head&gt;
+      {article ? &lt;ArticleBody data={article} /&gt; : &lt;Spinner /&gt;}
+    &lt;/&gt;
+  );
+}</code></pre>
+<p><strong>線索</strong>：瀏覽器看正常，但 (a) Search Console 抓到內文空、(b) FB/LINE 分享卡標題摘要全空、(c) DevTools disable JS 後整頁空白。</p>
+<p><strong>預期</strong>：資料只在 <code>useEffect</code>（client-only）抓，SSR 當下 <code>article</code> 為 null → server HTML 沒內文、OG 也空 → 爬蟲／社群 unfurl／no-JS 三者同源。修法：抓取移到 <code>getServerSideProps</code>（或 ISR），server 端填好資料與 OG。</p>
+<p><strong>通過門檻</strong>：指出「資料只在 client 抓、SSR 是空殼」+ 移到 server。<strong>滿分</strong>：三症狀同源、OG 必須 server-render、改 SSR 後注意快取（個人化 vs 公開）。</p>
+
+<h3>S3b 範例題 3：個人化內容被 CDN 公開快取（cache / 隱私）</h3>
+<div class="context-note">
+  <p><strong>出處</strong>：PDT-10007 subscriber-only、CF cache HIT 誤判、restore-95-cache-hit、cache-rule AND-condition 靜默失效 pattern。<strong>對應 rubric</strong>：D3 判斷、D4 系統、安全意識。</p>
+</div>
+<pre><code>// pages/article/[id].js  (getServerSideProps)
+export async function getServerSideProps({ params, req, res }) {
+  const user = await getUserFromCookie(req);                   // 可能是登入者
+  const article = await fetchArticle(params.id, { as: user }); // 帶個人化 / subscriber-only
+
+  // 「加速重複請求」
+  res.setHeader("Cache-Control", "public, s-maxage=600, stale-while-revalidate=60");
+
+  return { props: { article, isSubscriber: user?.isSubscriber ?? false } };
+}</code></pre>
+<p><strong>線索</strong>：subscriber 專屬內容偶爾被非訂閱者看到；有時 A 使用者看到 B 的個人化區塊；CF <code>cf-cache-status</code> 多為 HIT。</p>
+<p><strong>預期</strong>：對「帶登入者、含 subscriber-only」的回應設了 <code>public, s-maxage</code> → CF edge 快取第一個人的個人化 HTML 發給所有人 → 權限/隱私外洩。修法：個人化回應一律 <code>private, no-store</code>；或「公開外殼 SSR（可快取）+ 私有片段 client 端抓」。</p>
+<p><strong>通過門檻</strong>：指出「個人化內容設 public 快取 → 跨使用者外洩」+ 改 no-store/private。<strong>滿分</strong>：權衡整頁 no-store 殺命中率 → 公開殼 + 私有片段折衷，並提 subscriber-only 對爬蟲的呈現。這也是 AI 最常為「優化效能」亂加 cache header 卻忽略個人化的 bug。</p>
+
+<h3>S3b 範例題 4：不能用鍵盤操作的「按鈕」（a11y）</h3>
+<div class="context-note">
+  <p><strong>出處</strong>：a11y 為職務明列具備條件；a11y-test-via-aria-graph、a11y-audit-finding-triage pattern。<strong>對應 rubric</strong>：D1 底層（a11y）、D3 判斷。</p>
+</div>
+<pre><code>function ShareBar({ onShare, onBookmark }) {
+  return (
+    &lt;div className="share-bar"&gt;
+      &lt;div className="icon-btn" onClick={onShare}&gt;
+        &lt;ShareIcon /&gt;
+      &lt;/div&gt;
+      &lt;button className="icon-btn" onClick={onBookmark}&gt;
+        &lt;BookmarkIcon /&gt;
+      &lt;/button&gt;
+    &lt;/div&gt;
+  );
+}</code></pre>
+<p><strong>線索</strong>：鍵盤使用者無法 focus、按 Enter 觸發不了分享；螢幕報讀器把書籤鈕只念成「按鈕」；Lighthouse a11y 掉分。</p>
+<p><strong>預期</strong>：(1) 分享用 <code>&lt;div onClick&gt;</code> → 不可 focus、無鍵盤事件、無 role；(2) 兩顆 icon-only 按鈕都沒有 accessible name。修法：分享改回原生 <code>&lt;button&gt;</code>；兩顆都補 <code>aria-label</code>（或 sr-only 文字）。</p>
+<p><strong>通過門檻</strong>：抓到「div 當按鈕不可鍵盤操作」或「icon button 無 label」其一。<strong>滿分</strong>：兩者都抓、首選原生 <code>&lt;button&gt;</code> 而非補一堆 ARIA、並指出「a11y 測試要走 ARIA tree（accessible name/description）而非只斷言屬性存在」。</p>
 
 <h3>S3c 系統設計 + 無 AI 反思題（vocus 真實場景）</h3>
 <ul>
@@ -729,7 +830,7 @@ return { props: { html, toc } };</code></pre>
   </li>
   <li class="action-item action-yellow">
     <div class="action-title">需準備的題庫資產</div>
-    <div class="action-detail">① S2 破損 repo（含種入的 SSR/OG + 效能/a11y bug）；② S3b 帶缺陷的 AI 生成 PR；③ S3c vocus 場景題卡 + 標準答題要點；④ rubric 評分表與面試官校準說明。</div>
+    <div class="action-detail">① S2 live pairing starter repo（故意埋 client-fetch 的 <code>pages/author/[userId].js</code> + API client + 圖卡）+ curveball 腳本 + 觀察 rubric 表；② S3b 帶缺陷的 AI 生成 PR（含題 1–4 範例題）；③ S3c vocus 場景題卡 + 標準答題要點；④ rubric 評分表與面試官校準說明。</div>
   </li>
   <li class="action-item action-green">
     <div class="action-title">聯絡窗口更新</div>
