@@ -3,6 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow, noarchive, noimageindex">
+<meta name="googlebot" content="noindex, nofollow, noarchive, noimageindex">
 <title>vocus 前端工程師面試流程翻修（AI 開發時代版） — 2026-06-03</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -537,6 +539,71 @@ p code, li code, td code { background: var(--muted); padding: 2px 5px; }
 <tr><td>除錯</td><td>用 log／breakpoint 定位根因</td><td>寫有效 prompt 加速縮小範圍</td></tr>
 </tbody>
 </table>
+
+<h3>4.1 書面非同步問答的評分依據（含 Senior IC bar）</h3>
+
+<div class="context-note">
+  <p><strong>形式限制（先講）</strong>：「書面非同步問答 ＋ 允許 AI」這個形式，<strong>結構上無法可靠評 D1（底層）</strong>——分不出「候選人自己懂」還是「他的 AI 懂」（例：候選人貼一段 AI 對 Engine.IO 封包的解釋，無從判斷他是否獨立理解）。因此書面只用來判斷 <strong>D2／D3／D4 值不值得約 live</strong> 與 D5 的表達；<strong>D1 一律標「待 S3c 無 AI 口頭驗」，不在書面階段下結論。</strong></p>
+</div>
+
+<h4>Senior IC 加嚴 bar（高於一般職等的門檻）</h4>
+<ul class="action-list">
+  <li class="action-item action-yellow">
+    <div class="action-title">① 精確形容技術名詞</div>
+    <div class="action-detail">能用<strong>精確、正確</strong>的術語界定技術，而非複述工具的措辭。例（Socket.IO）：要能自己說清楚「<code>42[...]</code> 的 <code>4</code>＝Engine.IO message packet、<code>2</code>＝Socket.IO EVENT；我攔在 Nitro hook 是 Engine.IO 傳輸層、低於 Socket.IO 應用層」這種層級界定。<strong>語意模糊、借用 AI 原話、講不到層級邊界＝ senior 扣分。</strong></div>
+  </li>
+  <li class="action-item action-yellow">
+    <div class="action-title">② 主導方向（drive，而非 operate）</div>
+    <div class="action-detail">能<strong>主導技術方向</strong>：自己辨識約束 → 提出取捨 → 推動落地（例：Vercel 不支援 persistent WebSocket → 改 SSE ＋ 共享 state store）。負向：遇到不熟的領域（如 Docker／後端）整包丟給 AI、被動接受工具產出而沒有自己的方案，是 operator 不是 driver。</div>
+  </li>
+  <li class="action-item action-red">
+    <div class="action-title">③「為什麼這樣決定」必須不需提示就答得出</div>
+    <div class="action-detail">Senior 要能<strong>主動、獨立</strong>說出決策理由。<strong>若需要面試官先給提示／給建議、才能回答「為什麼這樣決定」，視為 negative signal</strong>——代表他沒有真正擁有這個決策的 rationale（多半是跟著工具走、或方向並非他主導）。對應 Karat「過程 ≠ 成果」：做得出來但說不出為什麼＝低分。</div>
+  </li>
+</ul>
+
+<h4>書面問答 行為錨定評分對照（可評維度）</h4>
+<table>
+<thead><tr><th>維度</th><th>弱信號（書面可見）</th><th>強信號（書面可見）</th><th>Senior bar</th></tr></thead>
+<tbody>
+<tr><td><strong>D2</strong> AI 協作</td><td>把整題丟給 AI、靠 AI 補底層空缺</td><td>把風格定成 AI rule、用 lint／type 當 AI 產出驗證閘</td><td>說得出何時「不用 AI、自己讀 log 定位」</td></tr>
+<tr><td><strong>D3</strong> 判斷力</td><td>review 只講「看核心邏輯」等通用話術</td><td>舉得出具體一次「辨識表面正確但實質有問題」</td><td>不需提示就講得出取捨理由（見 ③）</td></tr>
+<tr><td><strong>D4</strong> 系統思考</td><td>只描述做了什麼，沒講約束與替代方案</td><td>辨識平台約束→重構架構（如 WS→SSE＋redis）</td><td>能主導方向、提替代設計（見 ②）</td></tr>
+<tr><td><strong>D5</strong> 溝通</td><td>流水帳、少「為什麼」的取捨論述</td><td>主動講假設與取捨、面向讀者調整表達</td><td>精確使用技術名詞（見 ①）</td></tr>
+<tr><td><strong>D1</strong> 底層</td><td colspan="2"><em>書面形式不可靠評分（分不出懂的是人還是 AI）</em></td><td>一律延到 S3c 無 AI 口頭</td></tr>
+</tbody>
+</table>
+
+<h4>可複用 scorecard 模板（每位候選人套同一張）</h4>
+<table>
+<thead><tr><th>維度</th><th>分數 1–4</th><th>書面證據（引述 ＋ 題號／URL）</th><th>待 live 驗</th></tr></thead>
+<tbody>
+<tr><td>D2 AI 協作</td><td></td><td></td><td>S2／S3b</td></tr>
+<tr><td>D3 判斷力</td><td></td><td></td><td>S3b</td></tr>
+<tr><td>D4 系統思考</td><td></td><td></td><td>S3c</td></tr>
+<tr><td>D5 溝通</td><td></td><td></td><td>S1／S4</td></tr>
+<tr><td>D1 底層</td><td>—（書面不評）</td><td>—</td><td><strong>S3c 無 AI 口頭</strong></td></tr>
+</tbody>
+</table>
+
+<h4>套用範例（去識別化，僅示範評分依據）</h4>
+<p class="inline-note">以下為去識別化的範例，移除可指向特定候選人的連結與專案名稱，僅保留「書面訊號 → 分數 → senior bar 風險」的對應，示範如何套用上方依據。</p>
+
+<p><strong>案例 A — 即時通訊類 side project（較弱的一份）</strong></p>
+<div class="context-note">
+  <p><strong>素材</strong>：一個 WebRTC 視訊 side project（含原始碼與線上 Demo），以及一段「框架原生 WebSocket × socket.io 整合」的 AI 對話紀錄。</p>
+  <p><strong>初評（書面，D1 待 live）</strong>：D2≈3（風格→AI rule、lint／type 閘）、D3≈3（平台不支援 persistent WebSocket → 改 SSE＋共享 state store 的取捨）、D4≈3（serverless 約束下架構推理）、D5≈2.5（偏流水帳）。</p>
+  <p><strong>Senior bar 風險</strong>：技術說明是 AI 在向他解釋傳輸層封包、非他自己精確界定（撞 ① bar）；不熟的領域（容器／後端）整包丟 AI（撞 ② bar）。</p>
+  <p><strong>結論</strong>：不是 reject；<strong>約 live</strong>，於 S3c 無 AI 口頭驗兩件事——(1) 不開 AI 自己講封包分層（①）、(2) 問「為什麼這樣決定」是否需要被提示才答得出（③）。</p>
+</div>
+
+<p><strong>案例 B — production 站 ＋ 自製翻譯 workflow（較完整的一份）</strong></p>
+<div class="context-note">
+  <p><strong>素材</strong>：引以為傲成就為一個自己開發＋維護的 production 站（含線上站與 Demo 影片，功能涵蓋列表無限雙向滾動、比較功能、草稿匣、RWD、裝置推播通知）。AI 用量（ccusage 月度）屬輕量。</p>
+  <p><strong>初評（書面，D1 待 live）</strong>：D2≈3.5（前公司翻譯＋CTA＋圖片 workflow 寫成 markdown，手動 1hr → 15min，<strong>量化效益、撞中 S0 Q3 強信號</strong>；漸進式拆 Prompt — 先版面 sticky 欄＋橫滾＋RWD，完成才下拖曳排序）、D4≈3（真實 production 站，可驗）、D3≈2.5、D5≈2.5。用量輕量 → 對齊本報告「token ≠ 生產力」框架，非 token-maxxer（中性偏正）。</p>
+  <p><strong>Senior bar 風險</strong>：① 書面以產品語言描述功能，未到底層機制（<code>position:sticky</code>／scroll-anchoring／推播 token 生命週期）的技術精度 → 形式限制，待 live；② 有自拆需求＋自製 workflow 的 drive，但「AI 只用於自己負責的專案」偏 IC-on-own-tasks、未見跨團隊方向主導；<strong>把「review 同事＝review AI」收斂成「功能正確優先」，senior review 深度（架構／邊界／可維護性）待 S3b 驗</strong>。</p>
+  <p><strong>結論</strong>：比案例 A 更強（真 production 站＋量化 workflow）；<strong>約 live</strong>，S3b 驗 review 深度與架構取捨、S3c 驗精確術語（①）與「為什麼這樣決定」是否需提示（③）。</p>
+</div>
 
 </div>
 </details>
